@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import GitData from "./GitData";
 import axios from "axios";
@@ -6,37 +6,72 @@ import axios from "axios";
 const SearchBox = () => {
     const [input, setInput] = useState("");
     const [repo, setRepo] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
+
+    useEffect(() => {
+        setRepo([]);
+        setHasError(false);
+    }, [input]);
 
     const handleChange = (e) => {
         setInput(e.target.value);
-        // console.log(e.target.value);
     };
 
     const handleClick = async (e) => {
-        // console.log(input);
-        e.preventDefault();
+        setLoading(true);
+
         try {
             const result = await axios(
                 `https://api.github.com/users/${input}/repos`
             );
             setRepo(result);
+            setLoading(false);
         } catch (error) {
-            console.log(error);
+            setLoading(false);
+            setHasError(true);
         }
     };
-    // console.log(repo);
+
+    const handleDelete = () => {
+        setInput("");
+    };
+
     return (
         <>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    value={input}
-                    onChange={handleChange}
-                />
-                <button onClick={handleClick}>Search</button>
-            </div>
-            <GitData repo={repo} />
+            {hasError === false ? (
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={input}
+                        onChange={handleChange}
+                    />
+                    <button onClick={handleClick} disabled={!input}>
+                        {loading ? "Searching..." : "Search"}
+                    </button>
+                    <button onClick={handleDelete} disabled={!input}>
+                        Clear
+                    </button>
+                    <GitData repo={repo} />
+                </div>
+            ) : (
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={input}
+                        onChange={handleChange}
+                    />
+                    <button onClick={handleClick} disabled={!input}>
+                        {loading ? "Searching..." : "Search"}
+                    </button>
+                    <button onClick={handleDelete} disabled={!input}>
+                        Clear
+                    </button>
+                    <h2>Ooops.. Username Not Found</h2>
+                </div>
+            )}
         </>
     );
 };
