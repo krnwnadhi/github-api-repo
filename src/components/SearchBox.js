@@ -23,9 +23,8 @@ const SearchBox = () => {
         setInput(e.target.value);
     };
 
-    const handleClick = async (e) => {
+    const handleClick = async () => {
         setLoading(true);
-
         try {
             const result = await axios(
                 `https://api.github.com/users/${input}/repos`
@@ -50,6 +49,7 @@ const SearchBox = () => {
                             enterButton={loading ? "Searching..." : "Search"}
                             onSearch={handleClick}
                             allowClear
+                            size="large"
                         />
                     </Space>
                     <br /> <br />
@@ -64,6 +64,7 @@ const SearchBox = () => {
                             onChange={handleChange}
                             enterButton={loading ? "Searching..." : "Search"}
                             allowClear
+                            size="large"
                         />
                     </Space>
                     <br /> <br />
