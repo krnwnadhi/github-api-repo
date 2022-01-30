@@ -1,15 +1,22 @@
 import React from "react";
 
-const GitData = () => {
-    return (
-        <div>
-            <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-            </ul>
-        </div>
-    );
+const GitData = (props) => {
+    const { repo } = props;
+    console.log("List of Repository:", repo.data);
+
+    const repoList =
+        repo.length !== 0 ? (
+            repo.data.map((item) => (
+                <li key={item.id}>
+                    <a href={item.html_url} target="_blank" rel="noreferrer">
+                        {item.name}
+                    </a>
+                </li>
+            ))
+        ) : (
+            <div></div>
+        );
+    return <div>{repoList}</div>;
 };
 
 export default GitData;
