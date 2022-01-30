@@ -46,6 +46,7 @@ const SearchBox = () => {
                         placeholder="Search..."
                         value={input}
                         onChange={handleChange}
+                        onKeyPress={(e) => e.key === "Enter" && handleClick()}
                     />
                     <button onClick={handleClick} disabled={!input}>
                         {loading ? "Searching..." : "Search"}
