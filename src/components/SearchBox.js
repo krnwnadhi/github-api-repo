@@ -1,7 +1,12 @@
+import { Input, Space, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 
 import GitData from "./GitData";
 import axios from "axios";
+
+const { Search } = Input;
+
+const { Title, Text } = Typography;
 
 const SearchBox = () => {
     const [input, setInput] = useState("");
@@ -33,45 +38,38 @@ const SearchBox = () => {
         }
     };
 
-    const handleDelete = () => {
-        setInput("");
-    };
-
     return (
         <>
             {hasError === false ? (
                 <div>
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        value={input}
-                        onChange={handleChange}
-                        onKeyPress={(e) => e.key === "Enter" && handleClick()}
-                    />
-                    <button onClick={handleClick} disabled={!input}>
-                        {loading ? "Searching..." : "Search"}
-                    </button>
-                    <button onClick={handleDelete} disabled={!input}>
-                        Clear
-                    </button>
+                    <Space direction="vertical">
+                        <Search
+                            placeholder="Type GitHub Username.."
+                            value={input}
+                            onChange={handleChange}
+                            enterButton={loading ? "Searching..." : "Search"}
+                            onSearch={handleClick}
+                            allowClear
+                        />
+                    </Space>
+                    <br /> <br />
                     <GitData repo={repo} />
                 </div>
             ) : (
                 <div>
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        value={input}
-                        onChange={handleChange}
-                        onKeyPress={(e) => e.key === "Enter" && handleClick()}
-                    />
-                    <button onClick={handleClick} disabled={!input}>
-                        {loading ? "Searching..." : "Search"}
-                    </button>
-                    <button onClick={handleDelete} disabled={!input}>
-                        Clear
-                    </button>
-                    <h2>Ooops.. Username Not Found</h2>
+                    <Space direction="vertical">
+                        <Search
+                            placeholder="Type GitHub Username.."
+                            value={input}
+                            onChange={handleChange}
+                            enterButton={loading ? "Searching..." : "Search"}
+                            allowClear
+                        />
+                    </Space>
+                    <br /> <br />
+                    <Title level={4}>
+                        <Text type="danger">Username Does Not Exist</Text>
+                    </Title>
                 </div>
             )}
         </>
